@@ -4,4 +4,4 @@
 
 ## uses Jquery, mathjs, bootstrap
 
-## based on the work of http://www.atopon.org
+## Thanks to http://www.atopon.org
