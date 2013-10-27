@@ -76,14 +76,23 @@ angular.module('myApp.controllers', []).
 
 
     .controller('MyCtrl2', ['$scope', function ($scope) {
+
+        function init() {
+            NProgress.start();
+        }
+
+        init();
+
         $scope.reset = function() {
 
-            console.log("resetting");
-
-            var worker = new Worker('js/reDraw.js');
-
-            worker.postMessage("start");
-
+            NProgress.start();
+            var canvas = document.getElementById('canvas');
+            canvas.width = canvas.width;
+            NProgress.inc();
+            initMandel('canvas', canvas.width, canvas.height);
+            NProgress.inc();
+            computeMandel();
+            NProgress.done();
         }
 
         function reDraw() {
