@@ -1,7 +1,7 @@
 # Simple Fractal Generator
 
-## based on angular-seed
+### based on angular-seed
 
-## uses Jquery, mathjs, bootstrap
+### uses Jquery, mathjs, bootstrap
 
-## Thanks to http://www.atopon.org
+### thanks to http://www.atopon.org
