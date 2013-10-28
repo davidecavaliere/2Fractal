@@ -95,6 +95,14 @@ angular.module('myApp.controllers', []).
             NProgress.done();
         }
 
+        $scope.about = function() {
+            $('#about-panel').modal('view', {
+
+                animation : 'top',
+                position : 'center'
+            });
+        }
+
         function reDraw() {
            // NProgress.start();
             initMandel('canvas', 960, 440);

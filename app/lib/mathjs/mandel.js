@@ -146,8 +146,10 @@ function computeColors ()
     }
 }
 
+
 function computeMandel ()
 {
+    NProgress.inc();
     var KMAX = 256;
     var xstep = (pmax - pmin) / iCanvasWidth;
     var ystep = (qmax - qmin) / iCanvasHeight;
@@ -159,8 +161,8 @@ function computeMandel ()
 
     // create a back image and get a pointer to the pixels array
 
-    console.log(iCanvasHeight);
-    console.log(iCanvasWidth);
+    //console.log(iCanvasHeight);
+    //console.log(iCanvasWidth);
     mandelImage = ctx.getImageData(0, 0, iCanvasWidth, iCanvasHeight);
     mandelPixels = mandelImage.data;
 
@@ -200,10 +202,23 @@ function computeMandel ()
 
     var elapsed = new Date().getTime() - start;
     reportCoordsAndTiming(elapsed + " ms");
+
+    NProgress.done();
 }
+
+function computeMandelWorker() {
+    computeMandel();
+    /*
+    var blob = new Blob(computeMandel().toString());
+
+    var worker = new Worker(window.URL.createObjectURL(blob));
+    worker.postMessage("start");*/
+}
+
 
 function onMouseDown ( e )
 {
+    NProgress.start();
     e = window.event || e;
     mouseDown = true;
 
@@ -230,6 +245,7 @@ function onMouseMove ( e )
 
 function onMouseUp ( e )
 {
+
     e = window.event || e;
     if (mouseDown)
     {
@@ -264,7 +280,8 @@ function onMouseUp ( e )
             qmin = qmin + (iCanvasHeight - newY) * qw / iCanvasHeight;
             qmax = qmax - mbY * qw / iCanvasHeight;
 
-            computeMandel();
+            //computeMandel();
+            computeMandelWorker();
         }
     }
     mouseDown = false;
@@ -305,6 +322,7 @@ function onTouchMove ( e )
 
 function onTouchEnd ( e )
 {
+    NProgress.start();
     var touch = e.targetTouches[0];
     if (mouseDown)
     {
@@ -334,7 +352,8 @@ function onTouchEnd ( e )
             qmin = qmin + (iCanvasHeight - newY) * qw / iCanvasHeight;
             qmax = qmax - mbY * qw / iCanvasHeight;
 
-            computeMandel();
+            //computeMandel();
+            computeMandelWorker();
         }
     }
     mouseDown = false;
