@@ -147,6 +147,64 @@ function computeColors ()
 }
 
 
+function computeJulia() {
+    NProgress.inc();
+    var KMAX = 256;
+    var xstep = (pmax - pmin) / iCanvasWidth;
+    var ystep = (qmax - qmin) / iCanvasHeight;
+
+    // declare and initialise variables, for speed
+    var x = 0.0;
+    var y = 0.0;
+    var r = 1.0;
+
+    // create a back image and get a pointer to the pixels array
+
+    //console.log(iCanvasHeight);
+    //console.log(iCanvasWidth);
+    mandelImage = ctx.getImageData(0, 0, iCanvasWidth, iCanvasHeight);
+    mandelPixels = mandelImage.data;
+
+    var start = new Date().getTime();
+    for (var sy = 0; sy < iCanvasHeight; sy++)
+    {
+        for (var sx = 0; sx < iCanvasWidth; sx++)
+        {
+            var p = pmin + xstep * sx;
+            var q = qmax - ystep * sy;
+            var k = 0;
+            var x0 = 0.0;
+            var y0 = 0.0;
+
+            do
+            {
+                x = x0 * x0 - y0 * y0 + p;
+                y = 2 * x0 * y0 + q;
+                x0 = x;
+                y0 = y;
+                r = x * x + y * y;
+                k++;
+            }
+            while ((r <= ITERATION_LIMIT) && (k < KMAX));
+
+            if (k >= KMAX)
+            {
+                k = 0;
+            }
+
+            // draw the pixel
+            drawPixel(sx, sy, k);
+        }
+    }
+
+    ctx.putImageData(mandelImage, 0, 0);
+
+    var elapsed = new Date().getTime() - start;
+    reportCoordsAndTiming(elapsed + " ms");
+
+    NProgress.done();
+}
+
 function computeMandel ()
 {
     NProgress.inc();
@@ -390,5 +448,4 @@ function initMandel ( canvasElement, w, h )
     canvas.addEventListener('touchmove', onTouchMove);
     canvas.addEventListener('touchend', onTouchEnd);
 
-    console.log('+ canvas initialised at ' + iCanvasX + ' ' + iCanvasY);
 }

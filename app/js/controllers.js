@@ -1,70 +1,37 @@
 'use strict';
 /* Controllers */
 angular.module('myApp.controllers', []).
+    controller('MyCtrl1', ['$scope', '$log', function ($scope, $log) {
 
-    controller('MyCtrl1', ['$scope', function ($scope) {
+        $scope.canvas = {};
+        $scope.params = {
+            xmin : -4.90,
+            xmax : 1.63,
+            ymin : -1.5,
+            ymax : 1.5,
+            iterations : 1000
+        };
 
-        function init() {
-
-            /*        var palette = [
-             'rgb(0,0,0)',
-             'rgb(255,0,0)',
-             'rgb(0,255,0)',
-             'rgb(0,0,255)',
-             'rgb(255,255,255)'
-             ];
-
-             var R = 1000;
-
-             var color = palette[1];
-
-             var canvas = document.getElementById("a");
-
-             var context = canvas.getContext("2d");
-
-             var math = mathjs();
-
-             context.strokeRect(1, 1, 500, 300);
-             context.strokeRect(125,40, 500, 300);
-             console.log("Start calculation");
-             for ( var x=0; x<canvas.width; x++ ){
-             for( var y=0; y<canvas.height; y++ ) {
-             var xtemp = 0.0;
-
-             var zx = 0.0;
-             var zy = 0.0;
-             var i = 0;
-
-             while ((zx*zx) + (zy*zy) < R && i<palette.length) {
-             var xtemp = zx*zx + zy*zy + y/2.5;
-             zy = 2*zx*zy + y/2.5 ;
-             zx = xtemp;
-
-             i++;
-             }
-             color = palette[i-1];
-
-             context.fillStyle = color;
-
-             context.fillRect(x,y,1,1);
-             }
-             }
-             console.log("calculation done");*/
-
-
-        }
-
-        function drawMandel() {
-            NProgress.start();
-            initMandel("canvas", 960, 440);
-
-
-            computeMandel();
-            NProgress.done();
-        }
+        var toolbarHeight = 71;
 
         init();
         drawMandel();
+
+        function init() {
+            $log.log("Initing");
+            $scope.canvas.width = $(window).width() - 400;
+            $scope.canvas.height = $(window).height() - toolbarHeight * 3;
+            $log.log($scope.canvas);
+        }
+
+        function drawMandel() {
+            initMandel('canvas', 900, 400);
+            computeMandel();
+           /* Mandelbrot('canvas', $scope.canvas.width, $scope.canvas.height, $scope.params.xmin,
+                $scope.params.xmax, $scope.params.ymin, $scope.params.ymax, $scope.params.iterations
+            )*/
+        }
+
 
 
 
@@ -91,7 +58,7 @@ angular.module('myApp.controllers', []).
             NProgress.inc();
             initMandel('canvas', canvas.width, canvas.height);
             NProgress.inc();
-            computeMandel();
+            computeJulia();
             NProgress.done();
         }
 
